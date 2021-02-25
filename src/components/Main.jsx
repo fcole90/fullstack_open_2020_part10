@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 const Main = () => {
   return (  
   <View style={styles.container}>
-    <AppBar initialSelection='/'/> 
+    <AppBar/> 
     <View style={styles.container}>
     <Switch>
         <Route path="/" exact>

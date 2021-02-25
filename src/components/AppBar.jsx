@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Platform, Text, View, StyleSheet, ScrollView, TouchableHighlight, TouchableNativeFeedback } from 'react-native';
+import React from 'react';
+import { Platform, Text, View, StyleSheet, ScrollView, TouchableHighlight, TouchableNativeFeedback, Alert } from 'react-native';
 import Constants from 'expo-constants';
 
 import theme from '../theme';
-import { Link } from 'react-router-native';
+import { Link, useLocation } from 'react-router-native';
+import useAuthorizedUser from '../hooks/useAuthorizedUser';
+import useSignOut from '../hooks/useSignOut';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,32 +37,58 @@ const styles = StyleSheet.create({
   }
 });
 
-const TabLink = ({title, to, setSelected, selection}) => (
+const TabLink = ({title, to, currentLocation, onPress}) => (
   <Link 
-    to={to} 
-    onPress={() => {setSelected(to);}} 
+    to={to}
     component={Platform.OS === 'android' ? TouchableNativeFeedback : TouchableHighlight}
+    onPress={onPress}
     >
     <View style={[
       styles.tabLink,
-      selection === to && styles.tabLinkSelected
+      currentLocation === to && styles.tabLinkSelected
     ]}>
       <Text style={[
         styles.tabLinkText,
-        selection === to && styles.tabLinkTextSelected
+        currentLocation === to && styles.tabLinkTextSelected
       ]}>{title}</Text>
     </View>
   </Link>
 );
 
-const AppBar = ({initialSelection}) => {
-  const [selectedTab, setSelectedTab] = useState(initialSelection);
+const AppBar = () => {
+  const location = useLocation();
+  const { authorizedUser } = useAuthorizedUser();
+  const signOut = useSignOut();
+
+  const handleSignOut = () => {
+    Alert.alert(
+      "Sign Out",
+      "Are you sure you want to sign out?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: signOut }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  console.log('Authorized user:', authorizedUser);
 
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
-        <TabLink selection={selectedTab} setSelected={setSelectedTab} to='/' title='Repositories' />
-        <TabLink selection={selectedTab} setSelected={setSelectedTab} to='/sign-in' title='Sign In'/>
+        <TabLink currentLocation={location.pathname} to='/' title='Repositories' />
+        {
+          authorizedUser ?
+          <TabLink currentLocation={location.pathname} onPress={handleSignOut} title='Sign Out'/>
+          :
+          <TabLink currentLocation={location.pathname} to='/sign-in' title='Sign In'/>
+        }
+        
       </ScrollView>
     </View>
   );

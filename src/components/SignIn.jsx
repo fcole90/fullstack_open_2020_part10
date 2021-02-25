@@ -1,10 +1,14 @@
 import React from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
-
-import theme from '../theme';
-import FormikTextInput from './FormikTextInput';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-native';
+
+
+import theme from '../theme';
+import useSignIn from '../hooks/useSignIn';
+import FormikTextInput from './FormikTextInput';
+
 
 const styles = StyleSheet.create({
   title: {
@@ -51,16 +55,33 @@ const SignInForm = ({onSubmit}) => {
   );
 };
 
-const SignIn = () => (
-  <View style={styles.container}>
-    <Formik
-      initialValues={{username: '', password: ''}} 
-      onSubmit={(values) => {console.log(values);}}
-      validationSchema={validationSchema}
-    >
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
-    </Formik>
-  </View>
-);
+const SignIn = () => {
+  const [signIn, result] = useSignIn();
+  const history = useHistory();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const data = await signIn({ username, password });
+      console.log("Data:", data.data);
+      history.push('/');
+    } catch (e) {
+      console.log("Error:", e);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Formik
+        initialValues={{ username: '', password: '' }}
+        onSubmit={onSubmit}
+        validationSchema={validationSchema}
+      >
+        {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+      </Formik>
+    </View>
+  );
+};
 
 export default SignIn;
