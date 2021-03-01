@@ -84,9 +84,17 @@ const AppBar = () => {
         <TabLink currentLocation={location.pathname} to='/' title='Repositories' />
         {
           authorizedUser ?
-          <TabLink currentLocation={location.pathname} onPress={handleSignOut} title='Sign Out'/>
+          <>
+            <TabLink currentLocation={location.pathname} to='/new-review' title='Create a review'/>
+            <TabLink currentLocation={location.pathname} to='/my-reviews' title='My Reviews'/>
+            <TabLink currentLocation={location.pathname} onPress={handleSignOut} title='Sign Out'/>
+          </>         
           :
-          <TabLink currentLocation={location.pathname} to='/sign-in' title='Sign In'/>
+          <>
+            <TabLink currentLocation={location.pathname} to='/sign-in' title='Sign In'/>
+            <TabLink currentLocation={location.pathname} to='/sign-up' title='Sign Up'/>
+          </>
+
         }
         
       </ScrollView>

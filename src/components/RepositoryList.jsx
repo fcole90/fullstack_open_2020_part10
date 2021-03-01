@@ -1,10 +1,13 @@
-import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { Picker } from '@react-native-community/picker';
+import { useDebounce } from 'use-debounce';
 
 
 import RepositoryItem from './RepositoryItem';
 import theme from '../theme';
 import useRepositories from '../hooks/useRepositories';
+import { withRouter } from 'react-router-native';
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,75 +16,160 @@ const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: theme.colors.bgLightUnfocused,
     flex: 1
+  },
+  loadingText: {
+    backgroundColor: 'white',
+    flexGrow: 1,
+    flex: 1,
+    fontSize: 20,
+    textAlign: 'center',
+    paddingTop: 30
+  },
+  picker: {
+    color: theme.colors.textPrimary,
+    marginHorizontal: 10
+  },
+  headerSearchBar: {
+    backgroundColor: 'white',
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    fontSize: 16,
+    color: theme.colors.textSecondary
   }
 });
 
-// const mockRepositories = [
-//   {
-//     id: 'jaredpalmer.formik',
-//     fullName: 'jaredpalmer/formik',
-//     description: 'Build forms in React, without the tears',
-//     language: 'TypeScript',
-//     forksCount: 1589,
-//     stargazersCount: 21553,
-//     ratingAverage: 88,
-//     reviewCount: 4,
-//     ownerAvatarUrl: 'https://avatars2.githubusercontent.com/u/4060187?v=4',
-//   },
-//   {
-//     id: 'rails.rails',
-//     fullName: 'rails/rails',
-//     description: 'Ruby on Rails',
-//     language: 'Ruby',
-//     forksCount: 18349,
-//     stargazersCount: 45377,
-//     ratingAverage: 100,
-//     reviewCount: 2,
-//     ownerAvatarUrl: 'https://avatars1.githubusercontent.com/u/4223?v=4',
-//   },
-//   {
-//     id: 'django.django',
-//     fullName: 'django/django',
-//     description: 'The Web framework for perfectionists with deadlines.',
-//     language: 'Python',
-//     forksCount: 21015,
-//     stargazersCount: 48496,
-//     ratingAverage: 73,
-//     reviewCount: 5,
-//     ownerAvatarUrl: 'https://avatars2.githubusercontent.com/u/27804?v=4',
-//   },
-//   {
-//     id: 'reduxjs.redux',
-//     fullName: 'reduxjs/redux',
-//     description: 'Predictable state container for JavaScript apps',
-//     language: 'TypeScript',
-//     forksCount: 13902,
-//     stargazersCount: 52869,
-//     ratingAverage: 0,
-//     reviewCount: 0,
-//     ownerAvatarUrl: 'https://avatars3.githubusercontent.com/u/13142323?v=4',
-//   },
-// ];
+
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = () => {
-  const { repositories, loading } = useRepositories();
-  
-  // Get the nodes from the edges array
-  const repositoryNodes = repositories
-    // @ts-ignore
-    ? repositories.edges.map(edge => edge.node)
-    : [];
+const OrderSelectPicker = ({setSorting, sorting}) => (
+  <Picker
+    style={styles.picker}
+    selectedValue={sorting}
+    prompt="Sort by"
+    onValueChange={(itemValue) =>
+      setSorting(itemValue)
+    }>
+    <Picker.Item label="Latest Repositories" value="latest" />
+    <Picker.Item label="Highest Rated Repositories" value="highestRated" />
+    <Picker.Item label="Lowest Rated Repositories" value="lowestRated" />
+  </Picker>);
 
+
+const Item = ({item}) => {
+  
   return (
-    <FlatList
-      data={repositoryNodes}
-      // data={mockRepositories}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={RepositoryItem}
-      keyExtractor={item => item.id}
-      style={styles.listContainer}
+    <TouchableOpacity onPress={handleItemClick(item.id)}>
+      <RepositoryItem item={item} />
+    </TouchableOpacity>
+  );
+};
+
+
+export class RepositoryListContainer extends React.Component {
+  renderHeader = () => {
+    // this.props contains the component's props
+    const props = this.props;
+    const {searchKeyword, setSearchKeyword, sorting, setSorting} = props;
+  
+    return (
+      <>
+        <TextInput
+          style={styles.headerSearchBar} 
+          placeholder="Search..."
+          value={searchKeyword}
+          onChangeText={(text) => setSearchKeyword(text)}
+        />
+        <OrderSelectPicker 
+          setSorting={setSorting} 
+          sorting={sorting} 
+        />
+      </>
+    );
+  };
+
+  render() {
+    const { repositories, onEndReach } = this.props;
+    // const history = useHistory();
+    const history = this.props.history;
+    const repositoryNodes = repositories
+      ? repositories.edges.map((edge) => edge.node)
+      : [];
+
+    const Item = ({item}) => (
+      <TouchableOpacity onPress={handleItemClick(item.id)}>
+        <RepositoryItem item={item} />
+      </TouchableOpacity>
+    );
+
+    const handleItemClick = (id) => (
+      () => {
+        history.push(`/repo/${id}`);
+      }
+    );
+
+    return (
+      <FlatList
+        data={repositoryNodes}
+        // data={mockRepositories}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={Item}
+        keyExtractor={item => item.id}
+        style={styles.listContainer}
+        ListHeaderComponent={this.renderHeader()}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
+      />
+    );
+  }
+}
+
+const RoutedRepositoryListContainer = withRouter(RepositoryListContainer);
+
+
+const RepositoryList = () => {
+  const [orderBy, setOrderBy] = useState(undefined);
+  const [orderDirection, setOrderDirection] = useState(undefined);
+  const [sorting, setSorting] = useState('latest');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
+  const { repositories, loading, fetchMore } = useRepositories(8, orderDirection, orderBy, debouncedSearchKeyword);
+
+  const onEndReach = () => {
+    console.log('End reached');
+    fetchMore();
+  };
+
+  useEffect(() => {
+    switch (sorting) {
+      case "highestRated":
+        setOrderBy('RATING_AVERAGE');
+        setOrderDirection("DESC");
+        break;
+      case "lowestRated": 
+        setOrderBy('RATING_AVERAGE');
+        setOrderDirection("ASC");
+        break;
+      default:
+        setOrderBy('CREATED_AT');
+        setOrderDirection("DESC");
+    }
+
+  }, [sorting]);
+
+  // if (loading && !repositories) {
+  //   return <Text style={styles.loadingText}>Loading...</Text>;
+  // }
+  
+  return (
+    <RoutedRepositoryListContainer 
+      repositories={repositories} 
+      setSorting={setSorting} 
+      sorting={sorting}
+      searchKeyword={searchKeyword}
+      setSearchKeyword={setSearchKeyword}
+      onEndReach={onEndReach}
     />
   );
 };

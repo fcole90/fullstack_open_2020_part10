@@ -1,19 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight, TouchableHighlightBase } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 
 import theme from '../theme';
+import { withRouter } from 'react-router-native';
 
 const styles = StyleSheet.create({
   itemContainer: {
     backgroundColor: theme.colors.bgLight,
-    shadowColor: theme.colors.lightShadow,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 5,
-    elevation: 4
+    // marginBottom: 5,
+    ...theme.shadow
   },
   repoLogo: {
     width: 35,
@@ -83,36 +80,58 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: theme.colors.textSecondary,
     textAlign: 'center'
+  },
+  ghButton: {
+    backgroundColor: theme.colors.primary,
+    padding: 15,
+    margin: 10,
+    borderRadius: 5,
+    color: theme.colors.textOnDark,
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  ghButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 });
 
-const BottomItem = ({topRow, bottomRow}) => (
-  <View style={styles.bottomItem}>
+const BottomItem = ({topRow, bottomRow, testID}) => (
+  <View testID={testID} style={styles.bottomItem}>
     <Text style={styles.bottomItemTopRow}>{topRow < 1000 ? `${Math.trunc(topRow * 10)/10}` : `${Math.trunc(topRow / 100)/10}k`}</Text>
     <Text style={styles.bottomItemBottomRow}>{bottomRow}</Text>
   </View>
 );
 
-const RepositoryItem = ({item}) => (
+const RepositoryItem = ({ item, asPage=false }) => (
   <View style={styles.itemContainer}>
     <View style={styles.topContainer}>
       <View style={styles.repoLogoContainer}>
         <Image style={styles.repoLogo} source={{uri: item.ownerAvatarUrl}}></Image>
       </View>
       <View style={styles.topRightContainer}> 
-        <Text style={styles.repoName} >{item.fullName}</Text>
-        <Text style={styles.repoDescription} >{item.description}</Text>
+        <Text testID='fullName' style={styles.repoName} >{item.fullName}</Text>
+        <Text testID='description' style={styles.repoDescription} >{item.description}</Text>
         <View style={styles.repoLanguageContainer}>
-          <Text style={styles.repoLanguage} >{item.language}</Text>
+          <Text testID='language' style={styles.repoLanguage} >{item.language}</Text>
         </View>
       </View>
     </View>
     <View style={styles.bottomContainer}>
-      <BottomItem bottomRow='Stars' topRow={item.stargazersCount}/>
-      <BottomItem bottomRow='Forks' topRow={item.forksCount}/>
-      <BottomItem bottomRow='Reviews' topRow={item.reviewCount}/>
-      <BottomItem bottomRow='Rating' topRow={item.ratingAverage}/>
+      <BottomItem testID='stargazersCount' bottomRow='Stars' topRow={item.stargazersCount}/>
+      <BottomItem testID='forksCount' bottomRow='Forks' topRow={item.forksCount}/>
+      <BottomItem testID='reviewCount' bottomRow='Reviews' topRow={item.reviewCount}/>
+      <BottomItem testID='ratingAverage' bottomRow='Rating' topRow={item.ratingAverage}/>
     </View>
+    {
+      asPage && 
+      <TouchableHighlight style={styles.ghButton} onPress={() => (WebBrowser.openBrowserAsync(item.url))}>
+        <Text style={styles.ghButtonText}>Open in GitHub</Text>
+      </TouchableHighlight>
+    }
   </View>
 
   

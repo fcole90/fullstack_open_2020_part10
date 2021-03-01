@@ -6,6 +6,7 @@ const theme = {
     textSecondary: '#586069',
     textOnDark: '#bfbfbf',
     primary: '#0366d6',
+    alert: '#b3203d',
     bgDark: '#24292e',
     bgLight: '#fff',
     bgLightUnfocused: '#e1e4e8',
@@ -33,7 +34,7 @@ const theme = {
       height: 2,
     },
     shadowRadius: 5,
-    elevation: 4
+    elevation: 0
   }
 };
 

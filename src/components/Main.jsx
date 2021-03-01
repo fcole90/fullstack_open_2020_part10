@@ -1,11 +1,16 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Route, Switch, Redirect } from 'react-router-native';
+import { BackHandler, StyleSheet, View } from 'react-native';
+import { Route, Switch, Redirect, useHistory } from 'react-router-native';
 
 import AppBar from './AppBar';
 import RepositoryList from './RepositoryList';
 import SignIn from './SignIn';
 import theme from '../theme';
+import RepositoryItem from './RepositoryItem';
+import RepositoryView from './RepositoryView';
+import NewReview from './NewReview';
+import SignUp from './SignUp';
+import MyReviews from './MyReviews';
 
 
 const styles = StyleSheet.create({
@@ -19,6 +24,11 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
+  const history = useHistory();
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+    history.goBack();
+    return true;
+  });
   return (  
   <View style={styles.container}>
     <AppBar/> 
@@ -29,6 +39,18 @@ const Main = () => {
         </Route>
         <Route path="/sign-in" >
           <SignIn />
+        </Route>
+        <Route path="/sign-up" >
+          <SignUp />
+        </Route>
+        <Route path="/new-review" >
+          <NewReview />
+        </Route>
+        <Route path="/my-reviews" >
+          <MyReviews />
+        </Route>
+        <Route path="/repo/:id" >
+          <RepositoryView />
         </Route>
         <Redirect to="/" />
       </Switch>

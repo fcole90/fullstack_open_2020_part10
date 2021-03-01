@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   box: {
     borderWidth: 1,
     borderColor: 'gray',
-    height: 40,
+    minHeight: 40,
     borderRadius: 4,
     padding: 6
   },
