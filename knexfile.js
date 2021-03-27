@@ -7,6 +7,6 @@ module.exports = {
   },
   useNullAsDefault: true,
   seeds: {
-    direcotry: './seeds',
+    directory: './seeds',
   },
 };
