@@ -1,61 +1,82 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "rate-repository-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject",
-    "lint": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern",
-    "expo": "expo",
-    "test": "jest"
+    "start": "node ./src/index.js",
+    "lint": "eslint ./src",
+    "test": "jest .",
+    "migrate:make": "knex migrate:make",
+    "migrate:latest": "knex migrate:latest",
+    "initdatabase": "nodetouch database.sqlite",
+    "build": "npm run initdatabase && npm run migrate:latest",
+    "seed:make": "knex seed:make",
+    "seed:run": "knex seed:run"
   },
-  "jest": {
-    "preset": "jest-expo",
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*|react-router-native)"
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint",
+      "git add"
     ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kaltsoon/rate-repository-api.git"
+  },
+  "author": "Kalle Ilves",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kaltsoon/rate-repository-api/issues"
+  },
+  "homepage": "https://github.com/Kaltsoon/rate-repository-api#readme",
   "dependencies": {
-    "@apollo/react-hooks": "^4.0.0",
-    "@react-native-community/async-storage": "^1.12.1",
-    "@react-native-community/picker": "1.6.0",
-    "apollo-boost": "^0.4.9",
+    "@koa/cors": "^3.0.0",
+    "apollo-server": "^2.21.0",
+    "apollo-server-koa": "^2.21.0",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.0",
+    "dataloader": "^2.0.0",
+    "date-fns": "^2.9.0",
     "dotenv": "^8.2.0",
-    "expo": "~38.0.8",
-    "expo-status-bar": "^1.0.2",
-    "expo-web-browser": "^9.0.0",
-    "formik": "^2.2.6",
+    "es6-error": "^4.1.1",
+    "esm": "^3.2.25",
     "graphql": "^15.5.0",
-    "react": "~16.11.0",
-    "react-dom": "~16.11.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
-    "react-native-web": "^0.15.0",
-    "react-router-native": "^5.2.0",
-    "use-debounce": "^5.2.1",
-    "yup": "^0.32.9"
+    "graphql-iso-date": "^3.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.20.9",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-morgan": "^1.0.1",
+    "koa-router": "^8.0.8",
+    "lodash": "^4.17.21",
+    "lru-cache": "^5.1.1",
+    "objection": "^2.1.2",
+    "sqlite3": "^5.0.2",
+    "through2": "^3.0.1",
+    "touch": "^3.1.0",
+    "uuid": "^3.4.0",
+    "winston": "^3.2.1",
+    "yup": "^0.28.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.6",
-    "@expo/webpack-config": "^0.12.59",
-    "@testing-library/jest-native": "^3.4.3",
-    "@testing-library/react-native": "^7.1.0",
-    "@types/jest": "^26.0.20",
-    "@types/react-native": "^0.63.50",
-    "babel-eslint": "^10.1.0",
-    "babel-preset-expo": "~8.1.0",
-    "eslint": "^7.20.0",
-    "eslint-plugin-jest": "^24.1.5",
-    "eslint-plugin-react": "^7.22.0",
-    "expo-cli": "^4.1.6",
-    "jest": "^26.6.3",
-    "jest-expo": "^40.0.2"
-  },
-  "private": true
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.8.0",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "lint-staged": "^10.0.7",
+    "prettier": "^1.19.1"
+  }
 }
