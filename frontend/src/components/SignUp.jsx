@@ -77,7 +77,10 @@ const SignUp = () => {
   const history = useHistory();
 
   const onSubmit = async (values) => {
-    console.log(values);
+    console.log({
+      ...values,
+      password: "*hidden*"
+    });
     const { username, password } = values;
 
     try {

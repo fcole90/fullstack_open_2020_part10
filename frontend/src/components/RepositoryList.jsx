@@ -143,10 +143,6 @@ const RepositoryList = () => {
   };
 
   useEffect(() => {
-    console.log("Rep:", data);
-  }, [data]);
-
-  useEffect(() => {
     switch (sorting) {
       case "highestRated":
         setOrderBy('RATING_AVERAGE');
