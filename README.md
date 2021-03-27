@@ -9,8 +9,9 @@
 </a>
 
 ## How can I try the app?
-First install the Expo App for [Android](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www) or [iOS](https://itunes.apple.com/app/apple-store/id982107779)<br>
-Then scan the following QR code:
+First install the Expo App for [Android](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www) or [iOS](https://itunes.apple.com/app/apple-store/id982107779) and open it.<br>
+Then scan the following QR code though the app:
+
 <a href="https://expo.io/@fcole90/projects/rate-repository-app" target="_blank">
   <img 
    src="https://user-images.githubusercontent.com/1292230/112733252-74cd6580-8f47-11eb-8a07-56944cc44e24.png"
