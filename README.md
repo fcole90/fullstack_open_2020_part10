@@ -1,14 +1,38 @@
-![CI](https://github.com/fullstack-hy2020/rate-repository-api/workflows/CI/badge.svg)
+# Rate Repository App
 
-# Rate Repository API
+<a href="https://expo.io/@fcole90/projects/rate-repository-app" target="_blank">
+  <img 
+   src="https://user-images.githubusercontent.com/1292230/112733102-9c6ffe00-8f46-11eb-9e6a-5ce9730abae9.png"
+   height=400
+   alt="Screenshot of the application"
+  />
+</a>
 
-This is a GraphQL API for the Rate Repository application.
+## How can I try the app?
+First install the Expo App for [Android](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www) or [iOS](https://itunes.apple.com/app/apple-store/id982107779)<br>
+Then scan the following QR code:
+<a href="https://expo.io/@fcole90/projects/rate-repository-app" target="_blank">
+  <img 
+   src="https://user-images.githubusercontent.com/1292230/112733252-74cd6580-8f47-11eb-8a07-56944cc44e24.png"
+   alt="QR code for the app"
+  />
+</a>
 
-## ✔️ Requirements
+## GraphQL API
+
+You can check the API visiting: https://rate-repository-api-fcole90.herokuapp.com/graphql
+
+
+
+
+## Server: Rate Repository API
+![CI](https://github.com/fcole90/fullstack_open_2020_part10/workflows/CI/badge.svg)
+
+### ✔️ Requirements
 
 Node (versions `12.X.X` are tested, but later versions _might_ work as well) and npm. If you haven't installed Node or npm, [nvm](https://github.com/nvm-sh/nvm) is an easy to use tool for installing both. Nvm is also handy if you want to quickly switch between different Node versions.
 
-## 🚀 Getting started
+### 🚀 Getting started
 
 1. Clone this repository and run `npm install` in the `rate-repository-api` directory.
 
@@ -22,7 +46,7 @@ Node (versions `12.X.X` are tested, but later versions _might_ work as well) and
 
 6. All done! Just run `npm start` to start the server. After the server has started you should be able to access the GraphQL playground at http://localhost:5000/graphql.
 
-## 🔑 Authorization
+### 🔑 Authorization
 
 To list all the registered users, you can run this query in the GraphQL playground:
 
@@ -61,7 +85,7 @@ mutation {
 }
 ```
 
-### Authorize requests in the GraphQL playground
+#### Authorize requests in the GraphQL playground
 
 A handy way to authorize requests in the GraphQL playground is to retrieve an access token using the `authorize` mutation (see above for details) and then add the following in the "HTTP HEADERS" tab below the query editor:
 
@@ -73,7 +97,7 @@ A handy way to authorize requests in the GraphQL playground is to retrieve an ac
 
 Replace the `<ACCESS_TOKEN>` part with your access token.
 
-## 📖 Documentation
+### 📖 Documentation
 
 GraphQL playground offers documentation on how to use the API. Start the server by running `npm start`, open the GraphQL playground at http://localhost:5000/graphql and click the "docs" tab.
 
