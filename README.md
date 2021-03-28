@@ -27,8 +27,6 @@ App developed within the University of Helsinki's [Full Stack Web Development co
 You can check the API visiting: https://rate-repository-api-fcole90.herokuapp.com/graphql
 
 
-
-
 ## Server: Rate Repository API
 ![CI](https://github.com/fcole90/fullstack_open_2020_part10/workflows/CI/badge.svg)
 
