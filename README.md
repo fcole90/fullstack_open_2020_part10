@@ -21,8 +21,9 @@ Then scan the following QR code though the app:
 
 Alternatively, you can open [this link](https://expo.io/@fcole90/projects/rate-repository-app)
 
-## GraphQL API
+App developed within the University of Helsinki's [Full Stack Web Development course](https://fullstackopen.com/en/part10).
 
+## GraphQL API
 You can check the API visiting: https://rate-repository-api-fcole90.herokuapp.com/graphql
 
 
@@ -30,6 +31,8 @@ You can check the API visiting: https://rate-repository-api-fcole90.herokuapp.co
 
 ## Server: Rate Repository API
 ![CI](https://github.com/fcole90/fullstack_open_2020_part10/workflows/CI/badge.svg)
+
+Backend from https://github.com/fullstack-hy2020/rate-repository-api
 
 ### ✔️ Requirements
 
