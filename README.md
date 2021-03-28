@@ -19,6 +19,8 @@ Then scan the following QR code though the app:
   />
 </a>
 
+Alternatively, you can open [this link](https://expo.io/@fcole90/projects/rate-repository-app)
+
 ## GraphQL API
 
 You can check the API visiting: https://rate-repository-api-fcole90.herokuapp.com/graphql
