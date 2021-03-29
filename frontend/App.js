@@ -13,7 +13,10 @@ import AuthStorageContext from './src/contexts/AuthStorageContext';
 const App = () => {
   return (
     <NativeRouter>
-      <ApolloProvider client={apolloClient}>
+      <ApolloProvider
+        // @ts-ignore
+        client={apolloClient}
+      >
         <AuthStorageContext.Provider value={authStorage}>
           <Main />
         </AuthStorageContext.Provider>

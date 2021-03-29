@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 const validationSchema = yup.object().shape({
   repositoryOwner: yup
     .string()
-    .min(4, 'Repository owner name than ${min}')
+    .min(4, 'Repository owner name must be longer than ${min}')
     .required('Repository owner name is required'),
   repositoryName: yup
     .string()
@@ -97,7 +97,7 @@ const NewReview = () => {
   useEffect(() => {
     console.log('effect:', errors);
     console.log('effect slice:', errors[0]);
-    if(errors.length > 0) {
+    if(errors?.length > 0) {
       setError(errors[0]);
     }
   }, [errors]);

@@ -54,17 +54,8 @@ const OrderSelectPicker = ({setSorting, sorting}) => (
     <Picker.Item label="Latest Repositories" value="latest" />
     <Picker.Item label="Highest Rated Repositories" value="highestRated" />
     <Picker.Item label="Lowest Rated Repositories" value="lowestRated" />
-  </Picker>);
-
-
-const Item = ({item}) => {
-  
-  return (
-    <TouchableOpacity onPress={handleItemClick(item.id)}>
-      <RepositoryItem item={item} />
-    </TouchableOpacity>
-  );
-};
+  </Picker>
+);
 
 
 export class RepositoryListContainer extends React.Component {
@@ -130,6 +121,7 @@ const RoutedRepositoryListContainer = withRouter(RepositoryListContainer);
 
 
 const RepositoryList = () => {
+  const [neverLoaded, setNeverLoaded] = useState(true);
   const [orderBy, setOrderBy] = useState(undefined);
   const [orderDirection, setOrderDirection] = useState(undefined);
   const [sorting, setSorting] = useState('latest');
@@ -159,9 +151,10 @@ const RepositoryList = () => {
 
   }, [sorting]);
 
-  // if (loading && !repositories) {
-  //   return <Text style={styles.loadingText}>Loading...</Text>;
-  // }
+  if (loading && !repositories && neverLoaded) {
+    setNeverLoaded(false);
+    return <Text style={styles.loadingText}>Loading...</Text>;
+  }
   
   return (
     <RoutedRepositoryListContainer 
